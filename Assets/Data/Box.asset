@@ -15,3 +15,4 @@ MonoBehaviour:
   type: 0
   puzzleSprite: {fileID: 21300000, guid: 6cc20ed2d992548a0872e1f5652bba74, type: 3}
   phantomSprite: {fileID: 21300000, guid: c7189a6fe6f184e46bae3e5a4620afa4, type: 3}
+  prefab: {fileID: 6717501103487058854, guid: db4f563e56568467e8b9d8d56cf1904d, type: 3}

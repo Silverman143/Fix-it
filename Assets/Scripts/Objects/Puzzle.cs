@@ -2,10 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Puzzle", menuName = "Puzzle")]
-public class Puzzle : ScriptableObject
+namespace FixItGame
 {
-    public PuzzleType type;
-    public Sprite puzzleSprite;
-    public Sprite phantomSprite;
+    [CreateAssetMenu(fileName = "New Puzzle", menuName = "Puzzle")]
+    public class Puzzle : ScriptableObject
+    {
+        public PuzzleType type;
+        public Sprite puzzleSprite;
+        public Sprite phantomSprite;
+        public GameObject prefab;
+    }
 }

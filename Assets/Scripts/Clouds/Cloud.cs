@@ -2,30 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Cloud : MonoBehaviour
+namespace FixItGame
 {
-    [SerializeField] private float _speed = 1f;
-    [SerializeField] private bool _isVisible = false;
-    [SerializeField] private float _minX = 0;
-
-    private void Awake()
+    public class Cloud : MonoBehaviour
     {
-        _minX = Camera.main.transform.position.x - Camera.main.orthographicSize * Camera.main.aspect - 2;
-    }
+        [SerializeField] private float _speed = 1f;
+        [SerializeField] private bool _isVisible = false;
+        [SerializeField] private float _minX = 0;
 
-    private void Update()
-    {
-        transform.Translate(Vector3.left * _speed * Time.deltaTime);
-
-        // Проверка выхода за пределы экрана
-        if (transform.position.x < _minX)
+        private void Awake()
         {
-            Destroy(gameObject);
+            _minX = Camera.main.transform.position.x - Camera.main.orthographicSize * Camera.main.aspect - 2;
         }
-    }
 
-    public void SetSpeed(float newSpeed)
-    {
-        _speed = newSpeed;
+        private void Update()
+        {
+            transform.Translate(Vector3.left * _speed * Time.deltaTime);
+
+            // Проверка выхода за пределы экрана
+            if (transform.position.x < _minX)
+            {
+                Destroy(gameObject);
+            }
+        }
+
+        public void SetSpeed(float newSpeed)
+        {
+            _speed = newSpeed;
+        }
     }
 }

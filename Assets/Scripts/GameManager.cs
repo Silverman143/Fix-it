@@ -1,64 +1,97 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+namespace FixItGame
 {
-    private int _currentLevelProgress;
-    private int _currentLevelTarget;
-    private int _targetLevel = 0;
-    public int CurrentLevel => _targetLevel;
-    public static GameManager Instance;
-
-    private void Awake()
+    public class GameManager : MonoBehaviour
     {
-        if (Instance == null)
+        [SerializeField] private OpeningPuzzleData[] _newPuzzlesOpenData;
+
+        private int _currentLevelProgress;
+        private int _levelNext;
+        private int _currentLevel = 0;
+        public int CurrentLevel => _currentLevel;
+        public static GameManager Instance;
+        public float PuzzlesScale = 1;
+
+        private void Awake()
         {
-            Instance = this;
-            DontDestroyOnLoad(this.gameObject);
+            if (Instance == null)
+            {
+                Instance = this;
+                DontDestroyOnLoad(this.gameObject);
+            }
+            else
+            {
+                Destroy(this.gameObject);
+            }
+            _currentLevel = DBController.GetLevel();
         }
-        else
+
+        private void OnEnable()
         {
-            Destroy(this);
+            GlobalEvents.OnPhantomFilled += AddProgress;
+            GlobalEvents.OnPhantomEmpty += RemoveProgress;
+            GlobalEvents.OnLevelComplete += CompleteLevel;
         }
-        _targetLevel = PlayerPrefs.GetInt("LevelsComplete");
-    }
+        private void OnDisable()
+        {
+            GlobalEvents.OnPhantomFilled -= AddProgress;
+            GlobalEvents.OnPhantomEmpty -= RemoveProgress;
+            GlobalEvents.OnLevelComplete -= CompleteLevel;
+        }
 
-    private void OnEnable()
-    {
-        GlobalEvents.OnPhantomFilled += AddProgress;
-        GlobalEvents.OnPhantomEmpty += RemoveProgress;
-    }
-    private void OnDisable()
-    {
-        GlobalEvents.OnPhantomFilled -= AddProgress;
-        GlobalEvents.OnPhantomEmpty -= RemoveProgress;
-    }
-    private void AddProgress()
-    {
-        _currentLevelProgress++;
-    }
-    private void RemoveProgress()
-    {
-        _currentLevelProgress--;
-    }
 
-    public void LoadLevel()
-    {
-        SceneManager.LoadScene(1);
-    }
+        private void CompleteLevel()
+        {
+            _currentLevel++;
+            DBController.SaveLevel(_currentLevel);
+        }
 
-    public void LevelUp()
-    {
-        _targetLevel++;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        private void AddProgress()
+        {
+            _currentLevelProgress++;
+        }
+        private void RemoveProgress()
+        {
+            _currentLevelProgress--;
+        }
 
-    }
+        public void LoadLevel()
+        {
+            SceneManager.LoadScene(1);
+        }
 
-    public void LevelDown()
-    {
-        _targetLevel--;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        public void LevelUp()
+        {
+            _currentLevel++;
+
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
+        }
+
+        public void LevelDown()
+        {
+            _currentLevel--;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+
+        public void SetPuzzlesScale(float value)
+        {
+            PuzzlesScale = value;
+        }
+
+        public (OpeningPuzzleData, int) GetNewPuzzleProgressData()
+        {
+            OpeningPuzzleData data = _newPuzzlesOpenData
+                .Where(puzzleData => puzzleData.levelStart >= _levelNext)
+                .OrderBy(puzzleData => puzzleData.levelStart)
+                .FirstOrDefault();
+            // Current level was upgrade by level complete 
+            return (data, _currentLevel-1);
+        }
     }
 }

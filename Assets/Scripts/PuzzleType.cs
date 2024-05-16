@@ -1,7 +1,10 @@
 ﻿using System;
 
-[Serializable]
-public enum PuzzleType
+namespace FixItGame
 {
-    Box
+    [Serializable]
+    public enum PuzzleType
+    {
+        Box, Compozite0, Compozite1, Compozite2, Compozite3, Compozite4, Compozite5
+    }
 }

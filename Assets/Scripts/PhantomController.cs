@@ -3,78 +3,82 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class PhantomController : MonoBehaviour
+namespace FixItGame
 {
-    [SerializeField] private float _possibleOffset = 0.1f;
-
-    private SpriteRenderer _spriteRenderer;
-    private PuzzleType _type;
-    private List<PuzzleController> _viewingObjects = new List<PuzzleController>();
-    private PuzzleController _activeObject = null;
-    private bool _isFilled = false;
-
-    private void OnEnable()
+    public class PhantomController : MonoBehaviour
     {
-        _spriteRenderer = GetComponent<SpriteRenderer>();
-    }
+        [SerializeField] private float _possibleOffset = 0.1f;
 
-    public void Init(Sprite sprite, PuzzleType type, Vector2 position) {
-        _spriteRenderer.sprite = sprite;
-        _type = type;
-        transform.position = position;
-    }
+        private SpriteRenderer _spriteRenderer;
+        private PuzzleType _type;
+        private List<PuzzleController> _viewingObjects = new List<PuzzleController>();
+        private PuzzleController _activeObject = null;
+        private bool _isFilled = false;
 
-    private void FixedUpdate()
-    {
-        CheckFilled();
-    }
-
-    private void CheckFilled()
-    {
-        bool found = false;
-        float squaredOffset = _possibleOffset * _possibleOffset;
-        foreach (PuzzleController obj in _viewingObjects)
+        private void OnEnable()
         {
-            if ((transform.position - obj.transform.position).sqrMagnitude < squaredOffset)
+            _spriteRenderer = GetComponent<SpriteRenderer>();
+        }
+
+        public void Init(Sprite sprite, PuzzleType type, Vector2 position)
+        {
+            _spriteRenderer.sprite = sprite;
+            _type = type;
+            transform.position = position;
+        }
+
+        private void FixedUpdate()
+        {
+            CheckFilled();
+        }
+
+        private void CheckFilled()
+        {
+            bool found = false;
+            float squaredOffset = _possibleOffset * _possibleOffset;
+            foreach (PuzzleController obj in _viewingObjects)
             {
-                found = true;
-                _activeObject = obj;
-                break;
+                if ((transform.position - obj.transform.position).sqrMagnitude < squaredOffset)
+                {
+                    found = true;
+                    _activeObject = obj;
+                    break;
+                }
+            }
+
+            if (found && !_isFilled)
+            {
+                _isFilled = true;
+                _activeObject.AddActivePart();
+                GlobalEvents.RaisePhantomFilled();
+            }
+            if (!found && _isFilled)
+            {
+                _isFilled = false;
+                _activeObject.RemovePart();
+                GlobalEvents.RaisePhantomEmpty();
             }
         }
 
-        if (found && !_isFilled)
+        private void OnTriggerEnter2D(Collider2D collision)
         {
-            _isFilled = true;
-            _activeObject.AddActivePart();
-            GlobalEvents.OnPhantomFilledInvoke();
-        }
-        if (!found && _isFilled)
-        {
-            _isFilled = false;
-            _activeObject.RemovePart();
-            GlobalEvents.OnPhantomEmptyInvoke();
-        }
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.TryGetComponent<PuzzleController>(out PuzzleController puzzleObject))
-        {
-            if (puzzleObject.Type == _type)
+            if (collision.TryGetComponent<PuzzleController>(out PuzzleController puzzleObject))
             {
-                _viewingObjects.Add(puzzleObject);
+                if (puzzleObject.Type == _type)
+                {
+                    _viewingObjects.Add(puzzleObject);
+                }
             }
         }
-    }
 
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.TryGetComponent<PuzzleController>(out PuzzleController puzzleObject))
+        private void OnTriggerExit2D(Collider2D collision)
         {
-            if (puzzleObject.Type == _type)
+            if (collision.TryGetComponent<PuzzleController>(out PuzzleController puzzleObject))
             {
-                _viewingObjects.Remove(puzzleObject);
+                if (puzzleObject.Type == _type)
+                {
+                    _viewingObjects.Remove(puzzleObject);
+                }
             }
         }
     }

@@ -1,24 +1,51 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using static GlobalEvents;
 
-public class GlobalEvents
+
+using System;
+
+namespace FixItGame
 {
-    public delegate void PhantomFilled();
-    public static event PhantomFilled OnPhantomFilled;
-
-    public delegate void PhantomEmpty();
-    public static event PhantomEmpty OnPhantomEmpty;
-
-    public static void OnPhantomFilledInvoke()
+    public class GlobalEvents
     {
-        OnPhantomFilled.Invoke();
-    }
-    public static void OnPhantomEmptyInvoke()
-    {
-        OnPhantomEmpty.Invoke();
-    }
+        public static event Action OnPhantomFilled;
+        public static event Action OnPhantomEmpty;
+        public static event Action<PuzzleController> OnCreateNewPuzzle;
+        public static event Action OnPuzzleHits;
+        public static event Action<float> OnSoundVolumeChanged;
+        public static event Action<float> OnMusicVolumeChanged;
+        public static event Action OnLevelComplete;
 
+        public static void RaisePhantomFilled()
+        {
+            OnPhantomFilled?.Invoke();
+        }
+        public static void RaisePhantomEmpty()
+        {
+            OnPhantomEmpty?.Invoke();
+        }
 
+        public static void RaiseCreateNewPuzzle(PuzzleController puzzle)
+        {
+            OnCreateNewPuzzle?.Invoke(puzzle);
+        }
+
+        public static void RaisePuzzleHits()
+        {
+            OnPuzzleHits?.Invoke();
+        }
+
+        public static void RaiseSoundValueChanged(float value)
+        {
+            OnSoundVolumeChanged?.Invoke(value);
+        }
+
+        public static void RaiseMusicValueChanged(float value)
+        {
+            OnMusicVolumeChanged?.Invoke(value);
+        }
+
+        public static void RaiseLevelComplete()
+        {
+            OnLevelComplete?.Invoke();
+        }
+    }
 }

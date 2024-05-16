@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74c90898cb9a74724bbf2ab29a227d90, type: 3}
+  m_Name: ConpozitePuzzle2
+  m_EditorClassIdentifier: 
+  type: 3
+  puzzleSprite: {fileID: 21300000, guid: 6cc20ed2d992548a0872e1f5652bba74, type: 3}
+  phantomSprite: {fileID: 21300000, guid: c7189a6fe6f184e46bae3e5a4620afa4, type: 3}
+  prefab: {fileID: 2891266794511400716, guid: 9375fba23860c4d6f841590c0d698402, type: 3}

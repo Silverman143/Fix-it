@@ -1,10 +1,14 @@
 ﻿using System;
 using UnityEngine;
 
-[Serializable]
-public class PhantomData
+namespace FixItGame
 {
-    public PuzzleType type;
-    public Vector2 position;
-    public Quaternion rotation;
+    [Serializable]
+    public class PhantomData
+    {
+        public PuzzleType type;
+        public Vector2 position;
+        public Quaternion rotation;
+        public Vector2 scale;
+    }
 }

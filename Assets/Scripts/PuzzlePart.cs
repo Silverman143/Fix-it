@@ -1,23 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class PuzzlePart : PuzzleController
+namespace FixItGame
 {
-    [SerializeField] private PuzzleController _parrent;
-
-    private void Awake()
+    public class PuzzlePart : PuzzleController
     {
-        _parrent = transform.parent.GetComponent<PuzzleController>();
-    }
+        [SerializeField] private PuzzleController _parrent;
 
-    public override void AddActivePart()
-    {
-        _parrent.AddActivePart();
-    }
+        private void Awake()
+        {
+            _parrent = transform.parent.GetComponent<PuzzleController>();
+        }
 
-    public override void RemovePart()
-    {
-        _parrent.RemovePart();
+        public override void AddActivePart()
+        {
+            _parrent.AddActivePart();
+        }
+
+        public override void RemovePart()
+        {
+            _parrent.RemovePart();
+        }
     }
 }
