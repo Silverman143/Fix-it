@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using YG;
 
 namespace FixItGame
 {
@@ -31,6 +32,7 @@ namespace FixItGame
         }
 
         [SerializeField] private AudioSource _bgSound;
+        [SerializeField] private bool _use60FPS = false;
 
         public static SettingsManager Instance { get; private set; }
         public bool isMobile = false;
@@ -42,10 +44,16 @@ namespace FixItGame
                 Instance = this;
                 DontDestroyOnLoad(gameObject);
                 LoadSettingsValues();
+                CheckDevice();
             }
             else
             {
                 Destroy(gameObject);
+            }
+
+            if (_use60FPS)
+            {
+                Application.targetFrameRate = 60;
             }
         }
 
@@ -63,31 +71,7 @@ namespace FixItGame
 
         private void CheckDevice()
         {
-            isMobile = Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer ||
-                   (Application.platform == RuntimePlatform.WebGLPlayer && IsMobileBrowser());
-        }
-
-        private bool IsMobileBrowser()
-        {
-#if UNITY_WEBGL && !UNITY_EDITOR
-        // Check for mobile device user agent using JavaScript interop
-        return Application.ExternalEval(
-            @"function isMobile() {
-                if (navigator.userAgent.match(/Android/i) ||
-                    navigator.userAgent.match(/webOS/i) ||
-                    navigator.userAgent.match(/iPhone/i) ||
-                    navigator.userAgent.match(/iPad/i) ||
-                    navigator.userAgent.match(/iPod/i) ||
-                    navigator.userAgent.match(/BlackBerry/i) ||
-                    navigator.userAgent.match(/Windows Phone/i)) {
-                    return true;
-                }
-                return false;
-            }
-            isMobile();");
-#else
-            return SystemInfo.deviceType == DeviceType.Handheld;
-#endif
+            isMobile = Application.isMobilePlatform;
         }
 
         private void LoadSettingsValues()

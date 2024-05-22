@@ -21,7 +21,10 @@ namespace FixItGame
         {
             _dropDown = GetComponent<TMP_Dropdown>();
             _dropDown.onValueChanged.AddListener(delegate { ChangeValue(_dropDown.value); });
+        }
 
+        private void Start()
+        {
             CreateItems();
         }
 
@@ -35,7 +38,7 @@ namespace FixItGame
                 string languageName = Enum.GetName(typeof(Language), lang);
                 _dropDown.options.Add(new TMP_Dropdown.OptionData(languageName));
             }
-
+            _dropDown.value = (int)LocalizationManager.Instance.Language;
             _dropDown.RefreshShownValue();
         }
 

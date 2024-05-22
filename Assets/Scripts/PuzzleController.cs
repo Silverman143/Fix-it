@@ -97,14 +97,14 @@ namespace FixItGame
             CheckOutline();
         }
 
-        public void Init(Sprite sprite, PuzzleType type, Vector2 position, float scale)
+        public void Init(Sprite sprite, PuzzleType type, Vector2 position, Vector2 scale)
         {
             _type = type;
             _sprite = sprite;
             _rigidBody.constraints = RigidbodyConstraints2D.FreezePosition;
             _isActive = false;
             transform.position = position;
-            transform.localScale = new Vector3(scale, scale, 1);
+            transform.localScale = scale;
 
         }
 

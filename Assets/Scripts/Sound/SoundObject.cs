@@ -20,7 +20,7 @@ namespace FixItGame
 
         public void PlaySound(Sound sound)
         {
-            _audioSource.volume = sound._volume;
+            _audioSource.volume = SettingsManager.Instance.SoundVolume;
             _audioSource.pitch = sound._speed;
             _audioSource.PlayOneShot(sound._clip);
             _isActive = true;

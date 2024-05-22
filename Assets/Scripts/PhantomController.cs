@@ -20,11 +20,13 @@ namespace FixItGame
             _spriteRenderer = GetComponent<SpriteRenderer>();
         }
 
-        public void Init(Sprite sprite, PuzzleType type, Vector2 position)
+        public void Init(Sprite sprite, PuzzleType type, Vector2 position, Quaternion rotation, Vector3 scale)
         {
             _spriteRenderer.sprite = sprite;
             _type = type;
             transform.position = position;
+            transform.rotation = rotation;
+            transform.localScale = scale;
         }
 
         private void FixedUpdate()

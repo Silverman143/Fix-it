@@ -11,17 +11,17 @@ namespace FixItGame
         [SerializeField] private float _speed;
         [SerializeField] private List<PuzzleType> _puzzles;
         [SerializeField] private Puzzle[] _puzzlesDatas;
+        private Vector2 _puzzlesScale = new Vector2(1, 1);
 
-        private float _puzzleScale = 1;
 
-
-        public void Init(List<PuzzleType> puzzles)
+        public void Init(List<PuzzleType> puzzles, Vector2 scale)
         {
             _puzzles = puzzles;
+            _puzzlesScale = scale;
             StartCoroutine(SpawnNewPuzzle());
         }
 
-        public void AddNewPuzzle(PuzzleType type, float scale)
+        public void AddNewPuzzle(PuzzleType type, Vector2 scale)
         {
             Puzzle puzzle = _puzzlesDatas.FirstOrDefault(p => p.type == type);
             Vector2 newPos = transform.position;
@@ -46,7 +46,7 @@ namespace FixItGame
                 PuzzleType newType = _puzzles[Random.Range(0, _puzzles.Count - 1)];
                 _puzzles.Remove(newType);
 
-                AddNewPuzzle(newType, _puzzleScale);
+                AddNewPuzzle(newType, _puzzlesScale);
             }
         }
     }

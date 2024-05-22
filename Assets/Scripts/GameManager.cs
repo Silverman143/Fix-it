@@ -11,7 +11,6 @@ namespace FixItGame
         [SerializeField] private OpeningPuzzleData[] _newPuzzlesOpenData;
 
         private int _currentLevelProgress;
-        private int _levelNext;
         private int _currentLevel = 0;
         public int CurrentLevel => _currentLevel;
         public static GameManager Instance;
@@ -65,6 +64,12 @@ namespace FixItGame
             SceneManager.LoadScene(1);
         }
 
+        public void LoadNextLevel()
+        {
+            GlobalEvents.RaiseLoadingNewLevel(_currentLevel);
+            SceneManager.LoadScene(1);
+        }
+
         public void LevelUp()
         {
             _currentLevel++;
@@ -87,10 +92,11 @@ namespace FixItGame
         public (OpeningPuzzleData, int) GetNewPuzzleProgressData()
         {
             OpeningPuzzleData data = _newPuzzlesOpenData
-                .Where(puzzleData => puzzleData.levelStart >= _levelNext)
+                .Where(puzzleData => puzzleData.levelEnd >= _currentLevel-1)
                 .OrderBy(puzzleData => puzzleData.levelStart)
                 .FirstOrDefault();
-            // Current level was upgrade by level complete 
+            // Current level was upgrade by level complete
+            Debug.Log(string.Format("current new puzzle: {0}", data.ToString()));
             return (data, _currentLevel-1);
         }
     }

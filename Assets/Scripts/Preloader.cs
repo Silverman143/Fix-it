@@ -13,7 +13,8 @@ namespace FixItGame
 
         private void Awake()
         {
-            StartCoroutine(DownloadLevelFiles());
+            /// Not working on WebGL
+            //StartCoroutine(DownloadLevelFiles());
         }
 
         private IEnumerator DownloadLevelFiles()

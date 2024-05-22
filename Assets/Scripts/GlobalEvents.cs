@@ -13,6 +13,11 @@ namespace FixItGame
         public static event Action<float> OnSoundVolumeChanged;
         public static event Action<float> OnMusicVolumeChanged;
         public static event Action OnLevelComplete;
+        public static event Action<int> OnLoadingNewLevel;
+        public static event Action OnTimerEnded;
+
+        public static event Action OnLevelStart;
+        public static event Action<bool> OnLevelPaused;
 
         public static void RaisePhantomFilled()
         {
@@ -46,6 +51,26 @@ namespace FixItGame
         public static void RaiseLevelComplete()
         {
             OnLevelComplete?.Invoke();
+        }
+
+        public static void RaiseLoadingNewLevel(int level)
+        {
+            OnLoadingNewLevel?.Invoke(level);
+        }
+
+        public static void RaiseTimerEnded()
+        {
+            OnTimerEnded?.Invoke();
+        }
+
+        public static void RaiseLevelStart()
+        {
+            OnLevelStart?.Invoke();
+        }
+
+        public static void RaiseLevelPaused(bool value)
+        {
+            OnLevelPaused?.Invoke(value);
         }
     }
 }

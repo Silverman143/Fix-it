@@ -3,6 +3,7 @@ using UnityEditor;
 
 namespace FixItGame
 {
+#if UNITY_EDITOR
     [CustomEditor(typeof(TextLocalization))]
     public class TextLocalizationEditor : Editor
     {
@@ -64,4 +65,5 @@ namespace FixItGame
             }
         }
     }
+#endif
 }

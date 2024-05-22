@@ -1,0 +1,14 @@
+{
+  "idSave": 388,
+  "isFirstSession": false,
+  "language": "English",
+  "promptDone": false,
+  "money": 1,
+  "newPlayerName": "Hello!",
+  "openLevels": [
+    false,
+    true,
+    false
+  ],
+  "currentLevel": 4
+}

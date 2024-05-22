@@ -18,11 +18,14 @@ namespace FixItGame
         {
             _language = LocalizationManager.Instance.Language;
             _image.sprite = _data.GetLocalization(_language);
+            _image.SetNativeSize();
+
+            LocalizationManager.Instance.OnLanguageChanged?.AddListener(UpdateLanguage);
         }
 
         private void OnEnable()
         {
-            LocalizationManager.Instance.OnLanguageChanged?.AddListener(UpdateLanguage);
+            LocalizationManager.Instance?.OnLanguageChanged?.AddListener(UpdateLanguage);
         }
 
         private void OnDisable()
@@ -35,6 +38,7 @@ namespace FixItGame
             _language = language;
 
             _image.sprite = _data.GetLocalization(_language);
+            _image.SetNativeSize();
         }
     }
 }
