@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "247309472576",
+    "project_id": "tidy-up---puzzle-game",
+    "storage_bucket": "tidy-up---puzzle-game.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:247309472576:android:b429a0caf979f8371d20a5",
+        "android_client_info": {
+          "package_name": "com.CollabsarGames.TidyUp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTv0WmAV5bfPK0xCOMl4YtFJlLe6t2LtI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

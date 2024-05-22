@@ -58,7 +58,8 @@ namespace FixItGame
             LoadLevel();
             CreatePhantoms();
             _spawner.Init(_levelData.puzzles, _levelData.puzzlesScale);
-            //CreatePuzzles();
+
+            Analytics.LevelStart(_activeLevelNumber);
         }
 
         private void OnEnable()
@@ -69,8 +70,11 @@ namespace FixItGame
             GlobalEvents.OnTimerEnded += ActivateFailedPanel;
 
             //Rew add
-            YandexGame.OpenVideoEvent += DeactivateFailedPanel;
-            YandexGame.ErrorVideoEvent += ActivateFailedPanel;
+            if (YandexGame.Instance != null)
+            {
+                YandexGame.OpenVideoEvent += DeactivateFailedPanel;
+                YandexGame.ErrorVideoEvent += ActivateFailedPanel;
+            }
         }
 
         private void OnDisable()
@@ -81,19 +85,19 @@ namespace FixItGame
             GlobalEvents.OnTimerEnded -= ActivateFailedPanel;
 
             //Rew add
-            YandexGame.OpenVideoEvent -= DeactivateFailedPanel;
-            YandexGame.ErrorVideoEvent -= ActivateFailedPanel;
+            if (YandexGame.Instance != null)
+            {
+                YandexGame.OpenVideoEvent -= DeactivateFailedPanel;
+                YandexGame.ErrorVideoEvent -= ActivateFailedPanel;
+            }
         }
 
-        private void ActivateFailedPanel() => _failedLevelPanel.SetActive(true);
-        private void DeactivateFailedPanel() => _failedLevelPanel.SetActive(false);
-        private void ActivateCompletePanel() => _completeLevelPanel.SetActive(true);
-
-
-        private void ActivateCompletePanel(bool value)
+        private void ActivateFailedPanel()
         {
-            _completeLevelPanel.SetActive(value);
+            Analytics.LevelFailed(_activeLevelNumber);
+            _failedLevelPanel.SetActive(true);
         }
+        private void DeactivateFailedPanel() => _failedLevelPanel.SetActive(false);
 
         private void Start()
         {
@@ -231,6 +235,7 @@ namespace FixItGame
                 _isComplete = true;
 
                 OnLevelComplete.Invoke();
+                Analytics.LevelComplete(_activeLevelNumber);
                 GlobalEvents.RaiseLevelComplete();
                 _completeLevelPanel.SetActive(true);
             }

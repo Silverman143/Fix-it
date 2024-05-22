@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
+using Firebase.Extensions;
 using UnityEngine;
-using YG;
 
 namespace FixItGame
 {
