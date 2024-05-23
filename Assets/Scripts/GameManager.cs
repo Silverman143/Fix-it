@@ -35,15 +35,27 @@ namespace FixItGame
             GlobalEvents.OnPhantomFilled += AddProgress;
             GlobalEvents.OnPhantomEmpty += RemoveProgress;
             GlobalEvents.OnLevelComplete += CompleteLevel;
+            GlobalEvents.OnGamePaused += StopGame;
+            GlobalEvents.OnGameContinue += ContinueGame;
         }
         private void OnDisable()
         {
             GlobalEvents.OnPhantomFilled -= AddProgress;
             GlobalEvents.OnPhantomEmpty -= RemoveProgress;
             GlobalEvents.OnLevelComplete -= CompleteLevel;
+            GlobalEvents.OnGamePaused -= StopGame;
+            GlobalEvents.OnGameContinue -= ContinueGame;
         }
 
+        private void StopGame()
+        {
+            Time.timeScale = 0f;
+        }
 
+        private void ContinueGame()
+        {
+            Time.timeScale = 1f;
+        }
         private void CompleteLevel()
         {
             _currentLevel++;
@@ -66,7 +78,6 @@ namespace FixItGame
 
         public void LoadNextLevel()
         {
-            GlobalEvents.RaiseLoadingNewLevel(_currentLevel);
             SceneManager.LoadScene(1);
         }
 

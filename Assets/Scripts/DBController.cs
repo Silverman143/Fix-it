@@ -1,7 +1,8 @@
 using UnityEngine;
+#if UNITY_WEBGL
 using YG;
 using System;
-using static UnityEngine.Rendering.DebugUI;
+#endif
 
 namespace FixItGame
 {
@@ -40,6 +41,7 @@ namespace FixItGame
 
         public static int GetLevel()
         {
+#if UNITY_WEBGL
             if (YandexGame.Instance != null)
             {
                 return YandexGame.savesData.currentLevel;
@@ -48,11 +50,15 @@ namespace FixItGame
             {
                 return GetValue("level", 0);
             }
+#else
+            return GetValue("level", 0);
+#endif
         }
 
         public static void SaveLevel(int value)
         {
-            if (YandexGame.Instance != null)
+#if UNITY_WEBGL
+         if (YandexGame.Instance != null)
             {
                 YandexGame.savesData.currentLevel = value;
                 YandexGame.SaveProgress();
@@ -61,6 +67,9 @@ namespace FixItGame
             {
                 SetValue("level", value);
             }
+#else
+            SetValue("level", value);
+#endif
         }
 
         public static float GetSoundValue() => GetValue("sound", 1f);
@@ -71,6 +80,7 @@ namespace FixItGame
 
         public static int GetLanguage()
         {
+#if UNITY_WEBGL
             if (YandexGame.Instance != null)
             {
                 string lang = YandexGame.savesData.language;
@@ -88,10 +98,14 @@ namespace FixItGame
             {
                 return GetValue("language", 0);
             }
+#else
+            return GetValue("language", 0);
+#endif
         }
 
         public static void SaveLanguage(int value)
         {
+#if UNITY_WEBGL
             if (YandexGame.Instance != null)
             {
                 Language lang = (Language)value;
@@ -102,10 +116,14 @@ namespace FixItGame
             {
                 SetValue("language", value);
             }
+#else
+            SetValue("language", value);
+#endif
         }
 
         public static void CleanData()
         {
+#if UNITY_WEBGL
             if (YandexGame.Instance != null)
             {
                 YandexGame.savesData.currentLevel = 0;
@@ -115,6 +133,9 @@ namespace FixItGame
             {
                 SetValue("level", 0);
             }
+#else
+            SetValue("level", 0);
+#endif
         }
 
     }

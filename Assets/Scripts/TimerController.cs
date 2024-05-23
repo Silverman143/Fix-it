@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using FixItGame;
 using TMPro;
 using UnityEngine;
-using YG;
 
 public class TimerController : MonoBehaviour
 {
@@ -29,8 +26,8 @@ public class TimerController : MonoBehaviour
         GlobalEvents.OnLevelStart += StartTimer;
         GlobalEvents.OnLevelPaused += SetPause;
         GlobalEvents.OnLevelComplete += StopTimer;
-        YandexGame.CloseVideoEvent += AddExtraTime;
 
+        AdsManager.OnRewardConfirmed += AddExtraTime;
     }
 
     private void OnDisable()
@@ -38,7 +35,9 @@ public class TimerController : MonoBehaviour
         GlobalEvents.OnLevelStart -= StartTimer;
         GlobalEvents.OnLevelPaused -= SetPause;
         GlobalEvents.OnLevelComplete -= StopTimer;
-        YandexGame.CloseVideoEvent -= AddExtraTime;
+
+        AdsManager.OnRewardConfirmed -= AddExtraTime;
+
     }
 
     private void Update()

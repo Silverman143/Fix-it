@@ -1,4 +1,3 @@
-using Firebase.Extensions;
 using UnityEngine;
 
 namespace FixItGame

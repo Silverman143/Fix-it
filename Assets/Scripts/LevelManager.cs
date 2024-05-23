@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.Events;
-using YG;
 
 namespace FixItGame
 {
@@ -15,10 +14,6 @@ namespace FixItGame
         [SerializeField] private Puzzle[] _puzzlesDatas;
         [SerializeField] private GameObject _fingerTutorial;
 
-        //UI pannels
-        [SerializeField] private GameObject _completeLevelPanel;
-        [SerializeField] private GameObject _failedLevelPanel;
-
         [SerializeField] private float _completeLevelTimer = 0.5f;
         [SerializeField] private float _levelTimer = 180.0f;
 
@@ -29,7 +24,6 @@ namespace FixItGame
 
         [SerializeField] private LevelData _levelData = new LevelData();
 
-        private string _levelsFilesPath;
         private int _activeLevelNumber;
         [SerializeField] private List<PuzzleController> _levelPuzzles = new List<PuzzleController>();
         private List<PhantomController> _levelPhantoms = new List<PhantomController>();
@@ -54,6 +48,7 @@ namespace FixItGame
             _activeLevelNumber = GameManager.Instance.CurrentLevel;
             _spawner = FindObjectOfType<PuzzlesSpawner>();
             _timerController = FindObjectOfType<TimerController>();
+
             Debug.Log(string.Format("Active level: {0}", _activeLevelNumber));
             LoadLevel();
             CreatePhantoms();
@@ -62,19 +57,24 @@ namespace FixItGame
             Analytics.LevelStart(_activeLevelNumber);
         }
 
+        private void Start()
+        {
+            _timerController.Init(value: _levelTimer);
+
+            GlobalEvents.RaiseLevelStart();
+
+            if (_activeLevelNumber == 0)
+            {
+                Instantiate(_fingerTutorial);
+            }
+        }
+
         private void OnEnable()
         {
             GlobalEvents.OnCreateNewPuzzle += AddLevelPuzzle;
             GlobalEvents.OnPhantomFilled += AddLevelProgress;
             GlobalEvents.OnPhantomEmpty += RemoveLevelProgress;
-            GlobalEvents.OnTimerEnded += ActivateFailedPanel;
 
-            //Rew add
-            if (YandexGame.Instance != null)
-            {
-                YandexGame.OpenVideoEvent += DeactivateFailedPanel;
-                YandexGame.ErrorVideoEvent += ActivateFailedPanel;
-            }
         }
 
         private void OnDisable()
@@ -82,32 +82,7 @@ namespace FixItGame
             GlobalEvents.OnCreateNewPuzzle -= AddLevelPuzzle;
             GlobalEvents.OnPhantomFilled -= AddLevelProgress;
             GlobalEvents.OnPhantomEmpty -= RemoveLevelProgress;
-            GlobalEvents.OnTimerEnded -= ActivateFailedPanel;
 
-            //Rew add
-            if (YandexGame.Instance != null)
-            {
-                YandexGame.OpenVideoEvent -= DeactivateFailedPanel;
-                YandexGame.ErrorVideoEvent -= ActivateFailedPanel;
-            }
-        }
-
-        private void ActivateFailedPanel()
-        {
-            Analytics.LevelFailed(_activeLevelNumber);
-            _failedLevelPanel.SetActive(true);
-        }
-        private void DeactivateFailedPanel() => _failedLevelPanel.SetActive(false);
-
-        private void Start()
-        {
-            _timerController.Init(value: _levelTimer);
-            GlobalEvents.RaiseLevelStart();
-
-            if (_activeLevelNumber == 0)
-            {
-                Instantiate(_fingerTutorial);
-            }
         }
 
         private void CreatePhantoms()
@@ -237,7 +212,6 @@ namespace FixItGame
                 OnLevelComplete.Invoke();
                 Analytics.LevelComplete(_activeLevelNumber);
                 GlobalEvents.RaiseLevelComplete();
-                _completeLevelPanel.SetActive(true);
             }
         }
 

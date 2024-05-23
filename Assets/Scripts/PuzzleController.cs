@@ -58,6 +58,7 @@ namespace FixItGame
 
         private void Update()
         {
+
             if (_hitEffectTimer < _hitEffectFrequency)
             {
                 _hitEffectTimer += Time.deltaTime;
@@ -110,9 +111,17 @@ namespace FixItGame
 
         private void OnMouseDown()
         {
+            Activate();
+        }
+
+        private void Activate()
+        {
+            Debug.Log("Activate puzzle !!!!!!!!!!!!!!!!!!!");
             if (!_isActive)
             {
                 _rigidBody.constraints = RigidbodyConstraints2D.None;
+                Debug.Log("11111!!!!!!!!!!!!!!!!!!!");
+                _rigidBody.AddForce(Vector2.zero);
                 _isActive = true;
                 OnPuzzleActivate.Invoke();
             }
