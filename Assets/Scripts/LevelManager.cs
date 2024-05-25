@@ -101,7 +101,13 @@ namespace FixItGame
 
         private void LoadLevel()
         {
-            string levelFilePath = string.Format("Levels/{0}", _activeLevelNumber);
+            int levelNumber = _activeLevelNumber;
+
+            if (levelNumber > 25)
+            {
+                levelNumber = Random.Range(10, 25);
+            }
+            string levelFilePath = string.Format("Levels/{0}", levelNumber);
 
             TextAsset jsonFile = Resources.Load<TextAsset>(levelFilePath);
 

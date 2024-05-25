@@ -99,7 +99,7 @@ namespace FixItGame
                 return GetValue("language", 0);
             }
 #else
-            return GetValue("language", 0);
+            return GetValue("language", 1);
 #endif
         }
 

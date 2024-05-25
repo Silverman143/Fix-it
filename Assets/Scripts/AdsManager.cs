@@ -2,6 +2,8 @@ using System;
 using UnityEngine;
 #if UNITY_WEBGL
 using YG;
+#else
+using GoogleMobileAds.Api;
 #endif
 
 namespace FixItGame

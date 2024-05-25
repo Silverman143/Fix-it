@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 namespace FixItGame
 {
-    public class PuzzleController : MonoBehaviour
+    public class PuzzleController : MonoBehaviour, IPointerDownHandler
     {
         [SerializeField] private PuzzleType _type;
         [SerializeField] private GameObject _outline;
@@ -102,7 +103,7 @@ namespace FixItGame
         {
             _type = type;
             _sprite = sprite;
-            _rigidBody.constraints = RigidbodyConstraints2D.FreezePosition;
+            _rigidBody.bodyType = RigidbodyType2D.Static;
             _isActive = false;
             transform.position = position;
             transform.localScale = scale;
@@ -119,9 +120,8 @@ namespace FixItGame
             Debug.Log("Activate puzzle !!!!!!!!!!!!!!!!!!!");
             if (!_isActive)
             {
-                _rigidBody.constraints = RigidbodyConstraints2D.None;
+                _rigidBody.bodyType = RigidbodyType2D.Dynamic;
                 Debug.Log("11111!!!!!!!!!!!!!!!!!!!");
-                _rigidBody.AddForce(Vector2.zero);
                 _isActive = true;
                 OnPuzzleActivate.Invoke();
             }
@@ -146,6 +146,14 @@ namespace FixItGame
                 {
                     _contacts.Remove(puzzle);
                 }
+            }
+        }
+
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            if (!_isActive)
+            {
+                Activate();
             }
         }
     }
