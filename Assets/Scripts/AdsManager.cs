@@ -69,27 +69,48 @@ namespace FixItGame
         private void OnEnable()
         {
 #if UNITY_WEBGL
+            YandexGame.OpenVideoEvent += HandleGamePaused;
             YandexGame.CloseVideoEvent += HandleRewardConfirmed;
             YandexGame.ErrorVideoEvent += HandleRewardRejected;
+
+            YandexGame.OpenFullAdEvent += HandleGamePaused;
+            YandexGame.CloseFullAdEvent += HandleGameContinue;
+            YandexGame.ErrorFullAdEvent += HandleGameContinue;
 #endif
         }
 
         private void OnDisable()
         {
 #if UNITY_WEBGL
+            YandexGame.OpenVideoEvent -= HandleGamePaused;
             YandexGame.CloseVideoEvent -= HandleRewardConfirmed;
             YandexGame.ErrorVideoEvent -= HandleRewardRejected;
+
+            YandexGame.OpenFullAdEvent -= HandleGamePaused;
+            YandexGame.CloseFullAdEvent -= HandleGameContinue;
+            YandexGame.ErrorFullAdEvent -= HandleGameContinue;
 #endif
         }
 
         private void HandleRewardConfirmed()
         {
             OnRewardConfirmed.Invoke();
+            HandleGameContinue();
         }
 
         private void HandleRewardRejected()
         {
             OnRewardRejected.Invoke();
+            HandleGameContinue();
+        }
+
+        private void HandleGameContinue()
+        {
+            GlobalEvents.RaiseGameContinue();
+        }
+        private void HandleGamePaused()
+        {
+            GlobalEvents.RaiseGamePaused();
         }
 
         public void ShowInterstitial(int level, Action action)
@@ -100,9 +121,7 @@ namespace FixItGame
                 return;
             }
 #if UNITY_WEBGL
-            Debug.Log("Run add");
             YandexGame.FullscreenShow();
-            Debug.Log("Do action add");
             action();
 #else
             ShowInterstitialAd(action);

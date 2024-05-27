@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 
 using System;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace FixItGame
 {
@@ -57,31 +58,24 @@ namespace FixItGame
                 string currentText = _tmp.text;
                 string localizedText = _data.GetLocalization(_language);
 
-                // Find all numbers in the current text and save their positions
+                // Найдите все числа в исходном тексте
                 var numberMatches = Regex.Matches(currentText, @"\d+");
-                var numbers = new System.Collections.Generic.List<string>();
+
+                // Создайте список для хранения найденных чисел
+                var numbers = new List<string>();
+
                 foreach (Match match in numberMatches)
                 {
                     numbers.Add(match.Value);
                 }
 
-                // Replace letters in current text with localized text while preserving spaces, punctuation, and numbers
-                int localizedIndex = 0;
-                string updatedText = Regex.Replace(currentText, @"[^\d]", m => {
-                    if (char.IsLetter(m.Value[0]) && localizedIndex < localizedText.Length)
-                    {
-                        return localizedText[localizedIndex++].ToString();
-                    }
-                    return m.Value;
-                });
+                // Преобразуем список в массив строк для использования в string.Format
+                string[] numberArray = numbers.ToArray();
 
-                // Replace numbers back in the text
-                int numberIndex = 0;
-                updatedText = Regex.Replace(updatedText, @"\d+", m => {
-                    return numberIndex < numbers.Count ? numbers[numberIndex++] : m.Value;
-                });
+                // Используем string.Format для замены placeholders на числа
+                string result = string.Format(localizedText, numberArray);
 
-                _tmp.text = updatedText;
+                _tmp.text = result;
             }
         }
     }

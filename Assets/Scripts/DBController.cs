@@ -91,12 +91,15 @@ namespace FixItGame
                 else
                 {
                     Console.WriteLine("Invalid language string.");
-                    return 0;
+                    if (lang == "ru") return 0;
+                    if (lang == "en") return 1;
+                    if (lang == "tr") return 2;
+                    return 1;
                 }
             }
             else
             {
-                return GetValue("language", 0);
+                return GetValue("language", 1);
             }
 #else
             return GetValue("language", 1);
